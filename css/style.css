@@ -1,0 +1,33 @@
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.header{
+    height: 200px;
+}
+
+.body{
+    display: flex;
+    flex-direction: column;
+}
+.mainGrid{
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 5px;
+    padding: 20px;
+    background-color: aquamarine;
+}
+.gridElement{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: floralwhite;
+}
+.gridElement:hover{
+    background-color: khaki;
+    cursor: pointer;
+}
