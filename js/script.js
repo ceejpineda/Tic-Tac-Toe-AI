@@ -1,5 +1,74 @@
+const Player = (sign) => {
+    this.sign = sign;
+
+    const getPlayerSign = () =>{
+        return sign;
+    }
+
+    return {getPlayerSign};
+}
+
+const gameBoard = (()=>{
+    const board = ["","","","","","","","",""];
+
+    const setSign = (boardArrayIndex, sign) => {
+        board[boardArrayIndex] = sign;
+    }
+
+    const getSign = (boardArrayIndex) => {
+        return board[boardArrayIndex];
+    }
+    const clearBoard = () => {
+        for(let i = 0; i < board.length; i++){
+            board[i] = "";
+        }
+    }
+    return {board, setSign, getSign, clearBoard };
+})();
+
+const logicController = (()=>{
+    const playerOne = Player("O");
+    const playerTwo = Player("X");
+
+    const playRound = (index) => {
+        gameBoard.setSign(index, playerOne.getPlayerSign());
+    }
+
+    return {playRound};
+})();
+
+const displayController = (()=>{
+    const gridElements = document.querySelectorAll(".gridElement");
 
 
+    gridElements.forEach(element => {
+        element.addEventListener("click", (e)=>{
+            console.log(e.target.innerText);
+            logicController.playRound([].indexOf.call(e.target.parentNode.children, e.target));
+            refreshGridDisplay();
+        })
+    });
+
+    const updateGridDisplay = () => {
+        for (let i = 0; i < gridElements.length; i++) {
+            
+        }
+    }
+
+
+    const refreshGridDisplay = () =>{
+        for(let i = 0; i < gridElements.length; i++){
+            gridElements[i].innerText = gameBoard.getSign(i);
+        }
+        console.log("hello");
+    }
+
+    const clickGrid = () =>{
+
+    }
+    
+    return {refreshGridDisplay};
+})();
 
 
 
