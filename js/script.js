@@ -1,22 +1,4 @@
-class TicTacToe{
 
-
-    createGrid(){
-
-    }
-    
-    checkWin(){
-
-    }
-    refreshScreen(){
-
-        
-    }
-    startGame(){
-
-    }
-
-}
 
 
 
@@ -62,4 +44,4 @@ function angle(cx,cy,ex,ey){
     return rad;
 };
 
-//END OF MOVING EYES
+//END OF MOVING EYES //
