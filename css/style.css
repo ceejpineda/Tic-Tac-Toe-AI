@@ -2,6 +2,10 @@
     font-family: Changa;
     src: url(../fonts/Changa.ttf);
 }
+@font-face {
+    font-family: Outline;
+    src: url(../fonts/Outlines.ttf);
+}
 *, *::after, *::before{
     box-sizing: border-box;
     color: #05445E;
@@ -36,6 +40,10 @@ body{
 }
 .gridElement{
     display: flex;
+    font-family: Outline, sans-serif;
+    color: black;
+    font-size: 70px;
+    font-weight: 700;
     align-items: center;
     justify-content: center;
     text-align: center;

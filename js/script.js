@@ -1,11 +1,21 @@
-const Player = (sign) => {
-    this.sign = sign;
+const Player = (sign, move) => {
+    const playerSign = sign;
+    const moves = [];
 
-    const getPlayerSign = () =>{
-        return sign;
+    const setMoves = (index) => {
+        moves.push(parseInt(index));
     }
 
-    return {getPlayerSign};
+    const getMoves = () => {
+        moves.sort();
+        return moves;
+    }
+
+    const getPlayerSign = () =>{
+        return playerSign;
+    }
+
+    return {getPlayerSign, getMoves, setMoves};
 }
 
 const gameBoard = (()=>{
@@ -27,14 +37,51 @@ const gameBoard = (()=>{
 })();
 
 const logicController = (()=>{
-    const playerOne = Player("O");
-    const playerTwo = Player("X");
+    const playerOne = Player("O",[]);
+    const playerTwo = Player("X",[]);
+    let turn = 0;
 
     const playRound = (index) => {
-        gameBoard.setSign(index, playerOne.getPlayerSign());
+        if(gameBoard.getSign(index) != "") return;
+        gameBoard.setSign(index, checkTurn(index));
     }
 
-    return {playRound};
+    const checkWinCondition = () => {
+        const winConditions = [[0,1,2],
+                            [0,3,6],
+                            [0,4,8],
+                            [1,4,7],
+                            [2,5,7],
+                            [2,4,6],
+                            [3,4,5],
+                            [6,7,8]];
+        
+        for(let i=0; i < winConditions.length; i++){
+            if(JSON.stringify(winConditions[i]) == JSON.stringify(playerOne.getMoves())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const checkTurn = (index) => {
+        if(turn%2 === 0){
+            playerOne.setMoves(index);
+            console.log(playerOne.getMoves());
+            turn++;
+            checkWinCondition();
+            return playerOne.getPlayerSign();
+        }else{
+            playerTwo.setMoves(index);
+            console.log(playerTwo.getMoves());
+            turn++;
+            checkWinCondition();
+            return playerTwo.getPlayerSign();
+        }
+
+    }
+
+    return {playRound, checkWinCondition};
 })();
 
 const displayController = (()=>{
@@ -49,23 +96,13 @@ const displayController = (()=>{
         })
     });
 
-    const updateGridDisplay = () => {
-        for (let i = 0; i < gridElements.length; i++) {
-            
-        }
-    }
-
-
     const refreshGridDisplay = () =>{
         for(let i = 0; i < gridElements.length; i++){
             gridElements[i].innerText = gameBoard.getSign(i);
         }
-        console.log("hello");
     }
 
-    const clickGrid = () =>{
-
-    }
+    
     
     return {refreshGridDisplay};
 })();
