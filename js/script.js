@@ -1,6 +1,19 @@
+/*
+Need to Improve:
++Design
++Checking Turn
++Needs only one Winnder
+
+Need to Add:
++Draw function
++AI!!!!!!!!!!!!!
++Win screens
+*/
+
+
 const Player = (sign) => {
     const playerSign = sign;
-    const moves = [];
+    const moves = []; // Example playerOne moves are [0,1,2]. This is for checking the Win Condition.
 
     const setMoves = (index) => {
         moves.push(parseInt(index));
@@ -33,18 +46,29 @@ const gameBoard = (()=>{
             board[i] = "";
         }
     }
-    return {board, setSign, getSign, clearBoard };
+    return {board, setSign, getSign, clearBoard};
 })();
 
 const logicController = (()=>{
     const playerOne = Player("O");
     const playerTwo = Player("X");
-    const playerAI = Player("%");
+    let resultOne = false;
+    let resultTwo = false;
     let turn = 0;
 
     const playRound = (index) => {
         if(gameBoard.getSign(index) != "") return;
-        gameBoard.setSign(index, checkTurn(index));
+        if(checkTurn() == "O"){
+            turn++;
+            gameBoard.setSign(index, "O");
+            playerOne.setMoves(index);
+            checkWinCondition();
+        }else if(checkTurn() == "X"){
+            turn++;
+            gameBoard.setSign(index, "X");
+            playerTwo.setMoves(index);
+            checkWinCondition();
+        }
     }
 
     const checkWinCondition = () => {
@@ -56,38 +80,35 @@ const logicController = (()=>{
                             [2,4,6],
                             [3,4,5],
                             [6,7,8]];
-        
         for(let i=0; i < winConditions.length; i++){
-            if(JSON.stringify(winConditions[i]) == JSON.stringify(playerOne.getMoves())){
-                return true;
+            resultOne = winConditions[i].every(val => playerOne.getMoves().includes(val));
+            resultTwo = winConditions[i].every(val => playerTwo.getMoves().includes(val));
+            if(resultOne === true || resultTwo === true){
+                break;
             }
         }
-        return false;
+        if(resultOne === true){
+            console.log("Player 1 Wins!");
+        }else if(resultTwo === true){
+            console.log("Player 2 Wins!");
+        }
+        //return false;
     }
 
-    const checkTurn = (index) => {
+    const checkTurn = () => {
         if(turn%2 === 0){
-            playerOne.setMoves(index);
-            console.log(playerOne.getMoves());
-            turn++;
-            checkWinCondition();
             return playerOne.getPlayerSign();
         }else{
-            playerAI.setMoves(aiController.findBestTurn());
-            console.log(playerTwo.getMoves());
-            turn++;
-            checkWinCondition();
             return playerTwo.getPlayerSign();
         }
 
     }
 
-    return {playRound, checkWinCondition};
+    return {playRound, checkWinCondition, checkTurn};
 })();
 
 const displayController = (()=>{
     const gridElements = document.querySelectorAll(".gridElement");
-
 
     gridElements.forEach(element => {
         element.addEventListener("click", (e)=>{
@@ -123,7 +144,8 @@ const aiController = (() => {
                 aiArr.push(i);
             }
         }
-        return Math.floor(Math.random()*(aiArr.length+1))
+        console.log(gameBoard.board)
+        return aiArr[Math.floor(Math.random()*(aiArr.length+1))];
     }
 
     const aiTurn = () => {
