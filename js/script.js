@@ -1,4 +1,4 @@
-const Player = (sign, move) => {
+const Player = (sign) => {
     const playerSign = sign;
     const moves = [];
 
@@ -37,8 +37,9 @@ const gameBoard = (()=>{
 })();
 
 const logicController = (()=>{
-    const playerOne = Player("O",[]);
-    const playerTwo = Player("X",[]);
+    const playerOne = Player("O");
+    const playerTwo = Player("X");
+    const playerAI = Player("%");
     let turn = 0;
 
     const playRound = (index) => {
@@ -72,7 +73,7 @@ const logicController = (()=>{
             checkWinCondition();
             return playerOne.getPlayerSign();
         }else{
-            playerTwo.setMoves(index);
+            playerAI.setMoves(aiController.findBestTurn());
             console.log(playerTwo.getMoves());
             turn++;
             checkWinCondition();
@@ -90,9 +91,9 @@ const displayController = (()=>{
 
     gridElements.forEach(element => {
         element.addEventListener("click", (e)=>{
-            console.log(e.target.innerText);
             logicController.playRound([].indexOf.call(e.target.parentNode.children, e.target));
             refreshGridDisplay();
+            showMessage();
         })
     });
 
@@ -102,12 +103,36 @@ const displayController = (()=>{
         }
     }
 
-    
+    const showMessage = () => {
+        if(logicController.checkWinCondition()){
+            console.log("Player One Wins");
+        }
+    }
+
+
     
     return {refreshGridDisplay};
 })();
 
+const aiController = (() => {
 
+    const findBestTurn = () =>{
+        let aiArr = []; 
+        for (let i = 0; i < gameBoard.board.length; i++) {
+            if(gameBoard.board[i] == ""){
+                aiArr.push(i);
+            }
+        }
+        return Math.floor(Math.random()*(aiArr.length+1))
+    }
+
+    const aiTurn = () => {
+        return Math.floor(Math.random()*10);
+    }
+
+    return {aiTurn, findBestTurn};
+
+})();
 
 // MOVING EYES // 
 const eyes1 = document.querySelectorAll('.eye1');
