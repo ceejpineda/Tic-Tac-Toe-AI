@@ -95,15 +95,17 @@ const logicController = (()=>{
 
     const playRound = (index) => {
         firstPlayer();
-        if(currentPlayer == playerOne.getPlayerSign()){
+        if(currentPlayer == playerOne.getPlayerSign() && !checkWinner()){
             playerOne.setMoves(index);
             gameBoard.setSign(index,playerOne.getPlayerSign());
+            checkWinner();
             nextPlayer();
             nextTurn();
         }
-        else if(currentPlayer == playerTwo.getPlayerSign()){
+        else if(currentPlayer == playerTwo.getPlayerSign() && !checkWinner()){
             playerTwo.setMoves(index);
             gameBoard.setSign(index, playerTwo.getPlayerSign());
+            checkWinner();
             nextPlayer();
             nextTurn();
         }
@@ -115,7 +117,7 @@ const logicController = (()=>{
                             [0,3,6],
                             [0,4,8],
                             [1,4,7],
-                            [2,5,7],
+                            [2,5,8],
                             [2,4,6],
                             [3,4,5],
                             [6,7,8]];
@@ -124,11 +126,27 @@ const logicController = (()=>{
                 result = 'X';
             }else if(winConditions[i].every(val => playerOne.getMoves().includes(val))){
                 result = 'O';
-            }else if(turn == 8 && result == null){
+            }else if(gameBoard.getBoard().indexOf("") === -1){
                 result = 'tie';
             }
         }
         return result;
+    }
+
+    const checkWinner = () =>{
+        let winner = checkWinCondition();
+        if(winner == 'X'){
+            console.log(playerTwo.getMoves())
+            console.log('X wins!')
+            return true;
+        }else if(winner == 'O'){
+            console.log(playerOne.getMoves())
+            console.log('O wins!')
+            return true;
+        }else if(winner == 'tie'){
+            console.log("It's a Tie!")
+            return true;
+        }
     }
 
     return {playerOne,playerTwo,playRound, checkWinCondition, refreshLogic};
@@ -149,6 +167,8 @@ const displayController = (()=>{
             if(e.target.innerText != "") return;
             logicController.playRound(e.target.dataset.index);
             refreshGridDisplay();
+            logicController.playRound(aiController.findBestTurn(gameBoard.getBoard()));
+            refreshGridDisplay();
         })
     });
 
@@ -166,19 +186,83 @@ const displayController = (()=>{
 
 const aiController = (() => {
     // Right now my AI turn is based on pure randomness of Math.random()
-    // 
-    const findBestTurn = (board) => {
-        let newBoard = board.slice(0);
+//     const findBestTurn = (board) => {
+//         let newBoard = board.slice(0);
         
-        let aiArr = []; 
+//         let aiArr = []; 
         
-        for (let i = 0; i < newBoard.length; i++) {
-            if(newBoard[i] == ""){
-                aiArr.push(i);
+//         for (let i = 0; i < newBoard.length; i++) {
+//             if(newBoard[i] == ""){
+//                 aiArr.push(i);
+//             }
+//         }
+//         return aiArr[Math.floor(Math.random()*(aiArr.length))];
+//    }
+    // END OF RANDOM
+
+    const findBestTurn = (board) =>{
+
+        let bestScore = -Infinity;
+        let move;
+        for(let i = 0; i<board.length; i++){
+            if (board[i] == ""){
+                board[i] = "X";
+                logicController.playerTwo.setMoves(i);
+                let score = minimax(board, 0, false);
+                board[i] = "";
+                logicController.playerTwo.getMoves().pop();
+                if(score>bestScore){
+                    bestScore = score;
+                    move = i;
+                }
             }
         }
-        return aiArr[Math.floor(Math.random()*(aiArr.length))];
-   }
+        return move;
+    }
+
+    let scores ={
+        X: 10,
+        O: -10,
+        tie: 0,
+    };
+
+    const minimax = (board, depth, isMaximizing) =>{
+        let result = logicController.checkWinCondition();
+        if(result !== null){
+            return scores[result];
+        }
+
+        if(isMaximizing){
+            let bestScore = -Infinity;
+            for(let i = 0; i<board.length; i++){
+                if (board[i] == ""){
+                    board[i] = "X";
+                    logicController.playerTwo.setMoves(i);
+                    let score = minimax(board, depth+1, false);
+                    logicController.playerTwo.getMoves().pop();
+                    board[i] = "";
+                    bestScore = Math.max(score, bestScore);
+                }
+            }
+            return bestScore;
+        }else{
+            let bestScore = Infinity;
+            for(let i = 0; i<board.length; i++){
+                if(board[i] == ""){
+                    board[i] = "O";
+                    logicController.playerOne.setMoves(i);
+                    let score = minimax(board, depth+1, true);
+                    logicController.playerOne.getMoves().pop();
+                    board[i] = "";
+                    bestScore = Math.min(score, bestScore);
+                }
+            }
+            return bestScore;
+        }
+        
+    }
+
+
    return {findBestTurn}
 })();
 
