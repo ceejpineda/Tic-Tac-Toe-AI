@@ -57,8 +57,8 @@ const gameBoard = (()=>{
 })();
 
 const logicController = (()=>{
-    const playerOne = Player("O");
-    const playerTwo = Player("X");
+    const playerOne = Player("⭕");
+    const playerTwo = Player("🗙");
     let currentPlayer;
     var turn;
 
