@@ -155,11 +155,11 @@ const logicController = (()=>{
 const displayController = (()=>{
     const gridElements = document.querySelectorAll(".gridElement");
     const resetButton = document.querySelector("#nextRound");
+    const winScreen = document.querySelector(".winScreen");
 
     resetButton.addEventListener("click", ()=>{
-        gameBoard.clearBoard();
-        logicController.refreshLogic();
-        refreshGridDisplay();
+        winScreen.innerText = "Victory";
+        winScreen.style.visibility = "visible"
     })
 
     gridElements.forEach(element => {
@@ -213,6 +213,7 @@ const aiController = (() => {
                 logicController.playerTwo.getMoves().pop();
                 if(score>bestScore){
                     bestScore = score;
+                    console.log(bestScore);
                     move = i;
                 }
             }
@@ -221,9 +222,9 @@ const aiController = (() => {
     }
 
     let scores ={
-        X: 10,
-        O: -10,
-        tie: 0,
+        X: 100,
+        O: 50,
+        tie: 100,
     };
 
     const minimax = (board, depth, isMaximizing) =>{
@@ -261,7 +262,6 @@ const aiController = (() => {
         }
         
     }
-
 
    return {findBestTurn}
 })();

@@ -8,10 +8,11 @@
 }
 *, *::after, *::before{
     box-sizing: border-box;
-    color: #05445E;
-    font-family: Changa, sans-serif;
+    
 }
 body{
+    font-family: Changa, sans-serif;
+    color: #05445E;
     background-color: #978989;
     background-image: url("../imgs/Gravity_falls_forest.webp");
     display: flex;
@@ -21,7 +22,7 @@ body{
     gap: 20px;
 }
 .header{
-    height: 200px;
+    height: 100px;
 }
 
 .body{
@@ -34,7 +35,7 @@ body{
     grid-template-rows: repeat(3, 150px);
     gap: 5px;
     padding: 20px;
-    background-color: #189AB4;
+    background-color: #1e1e20;
     border-radius: 10px;
     font-size: 30px;
     font-weight: 400;
@@ -48,11 +49,17 @@ body{
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-color: #75E6DA;
+    background-color: #33544c;
+    transition-duration: 0.3s;
+    transform-style: preserve-3d;
 }
 .gridElement:hover{
-    background-color: #6adbd0;
+    background-color: #407568;
     cursor: pointer;
+}
+.gridElement:active{
+    transition-delay: 10ms;
+    transform: rotateX(180deg);
 }
 .characterOne, .characterTwo{
     display:flex;
@@ -74,3 +81,28 @@ button#gameStart{
     width: 80px;
     height: 50px;
 }
+.round{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+.mainContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.winScreen {
+    /* Height & width depends on how you want to reveal the overlay (see JS below) */
+    visibility: hidden;
+    height: 100%;
+    width: 100%;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+  }
