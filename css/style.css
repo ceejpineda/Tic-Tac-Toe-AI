@@ -11,7 +11,7 @@
     
 }
 body{
-    font-family: Changa, sans-serif;
+    font-family: sans-serif;
     color: #05445E;
     background-color: #978989;
     background-image: url("../imgs/Gravity_falls_forest.webp");
@@ -21,6 +21,30 @@ body{
     justify-content: center;
     gap: 20px;
 }
+.startPage{
+    position: fixed;
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: #1e1e20;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+}
+.startPage .title{
+    display: flex;
+    flex-direction: column;
+}
+.startPage .title h1,p{
+    margin: 0;
+    padding: 0;
+}
+.header, .body, .footer, .round{
+    visibility: hidden;
+}
+
 .header{
     height: 100px;
 }
@@ -87,22 +111,26 @@ button#gameStart{
     justify-content: center;
     color: black;
 }
-.mainContent{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
 
 .winScreen {
-    /* Height & width depends on how you want to reveal the overlay (see JS below) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     visibility: hidden;
     height: 100%;
     width: 100%;
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    position: fixed;
+    z-index: 1;
     left: 0;
     top: 0;
-    background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
-    overflow-x: hidden; /* Disable horizontal scroll */
-    transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+    background-color: rgba(0,0,0, 0.9); 
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+  .winLoseText{
+    color: #7cc4b2;
+    font-size: 50px;
+    font-weight: 200;
   }

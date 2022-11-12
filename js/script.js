@@ -62,13 +62,6 @@ const logicController = (()=>{
     let currentPlayer;
     var turn;
 
-    const refreshLogic = () => {
-        turn = 0;
-        playerOne.clearMoves();
-        playerTwo.clearMoves();
-        gameBoard.clearBoard();
-    }
-
     const nextPlayer = () => {
         if (currentPlayer == playerOne.getPlayerSign()){
             currentPlayer = playerTwo.getPlayerSign();
@@ -138,28 +131,52 @@ const logicController = (()=>{
         if(winner == 'X'){
             console.log(playerTwo.getMoves())
             console.log('X wins!')
+            displayController.showMessage('X');
+            resetLogic();
+            winner = null;
             return true;
         }else if(winner == 'O'){
             console.log(playerOne.getMoves())
             console.log('O wins!')
+            displayController.showMessage('O');
+            resetLogic();
+            winner = null;
             return true;
         }else if(winner == 'tie'){
             console.log("It's a Tie!")
+            displayController.showMessage('tie');
+            resetLogic();
+            winner = null;
             return true;
+        }else{
+            return false;
         }
     }
+    
+    const resetLogic = () =>{
+        gameBoard.clearBoard();
+        playerOne.clearMoves();
+        playerTwo.clearMoves();
+        turn = undefined;
+        result = null;
+        currentPlayer = undefined;
+    }
 
-    return {playerOne,playerTwo,playRound, checkWinCondition, refreshLogic};
+    return {playerOne,playerTwo,playRound, checkWinCondition,checkWinner};
 })();
 
 const displayController = (()=>{
     const gridElements = document.querySelectorAll(".gridElement");
     const resetButton = document.querySelector("#nextRound");
     const winScreen = document.querySelector(".winScreen");
+    const nextRoundButton = document.querySelector("#resetBoard");
 
-    resetButton.addEventListener("click", ()=>{
-        winScreen.innerText = "Victory";
+    resetButton.addEventListener("click", ()=>{;
         winScreen.style.visibility = "visible"
+    })
+
+    nextRoundButton.addEventListener("click", ()=>{
+        winScreen.style.visibility = "hidden";
     })
 
     gridElements.forEach(element => {
@@ -167,8 +184,9 @@ const displayController = (()=>{
             if(e.target.innerText != "") return;
             logicController.playRound(e.target.dataset.index);
             refreshGridDisplay();
-            logicController.playRound(aiController.findBestTurn(gameBoard.getBoard()));
-            refreshGridDisplay();
+            //if(logicController.checkWinner()) return;
+            //logicController.playRound(aiController.findBestTurn(gameBoard.getBoard()));
+            //refreshGridDisplay();
         })
     });
 
@@ -178,10 +196,24 @@ const displayController = (()=>{
         }
     }
 
-    const showMessage = () => {
+    const showMessage = (whoWon) => {
+        const text = document.querySelector(".winLoseText");
+        if(whoWon == 'X'){
+            text.innerText = "You Lose!"
+            winScreen.style.visibility = "visible";
+            refreshGridDisplay();
+        }else if(whoWon == 'O'){
+            text.innerText = "You Won!"
+            winScreen.style.visibility = "visible";
+            refreshGridDisplay();
+        }else if(whoWon == 'tie'){
+            text.innerText = "It's a tie!"
+            winScreen.style.visibility = "visible";
+            refreshGridDisplay();
+        }
     }
     
-    return {refreshGridDisplay};
+    return {refreshGridDisplay, showMessage};
 })();
 
 const aiController = (() => {
@@ -213,7 +245,6 @@ const aiController = (() => {
                 logicController.playerTwo.getMoves().pop();
                 if(score>bestScore){
                     bestScore = score;
-                    console.log(bestScore);
                     move = i;
                 }
             }
@@ -264,6 +295,21 @@ const aiController = (() => {
     }
 
    return {findBestTurn}
+})();
+
+const startPage = (() => {
+    const readyButton = document.querySelector("#ready");
+    const header = document.querySelector(".header");
+    const body = document.querySelector(".body");
+    const round = document.querySelector(".round");
+    const footer = document.querySelector(".footer");
+    readyButton.addEventListener("click", ()=>{
+        document.querySelector(".startPage").remove();
+        header.style.visibility = "visible";
+        body.style.visibility = "visible";
+        round.style.visibility = "visible";
+        footer.style.visibility = "visible";
+    });
 })();
 
 const pageEffects = (() => {
