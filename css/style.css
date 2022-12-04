@@ -25,6 +25,10 @@ body{
     position: fixed;
     display:flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 20px;
     width: 100%;
     height: 100%;
     background-color: #1e1e20;
@@ -36,6 +40,11 @@ body{
 .startPage .title{
     display: flex;
     flex-direction: column;
+    font-size: 50px;
+    color: white;
+}
+.startPage p{
+    font-size: 20px;
 }
 .startPage .title h1,p{
     margin: 0;
@@ -74,7 +83,7 @@ body{
     justify-content: center;
     text-align: center;
     background-color: #33544c;
-    transition-duration: 0.3s;
+    transition-duration: 0.1s;
     transform-style: preserve-3d;
 }
 .gridElement:hover{
@@ -129,8 +138,27 @@ button#gameStart{
     transition: 0.5s;
 }
 
-  .winLoseText{
-    color: #7cc4b2;
-    font-size: 50px;
-    font-weight: 200;
-  }
+.winLoseText{
+color: #7cc4b2;
+font-size: 50px;
+font-weight: 200;
+}
+.choose{
+    color: white;
+    
+}
+.enemy{
+    width: 150px;
+    height: 150px;
+    color: white;
+    object-fit: contain;
+    border: 2px solid gray;
+    background-color: white;
+}
+.enemy:hover{
+    cursor: pointer;
+    border: 3px solid green;
+}
+.enemy:focus .enemy:active{
+    border: 3px solid black;
+}

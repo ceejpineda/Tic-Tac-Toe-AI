@@ -57,8 +57,8 @@ const gameBoard = (()=>{
 })();
 
 const logicController = (()=>{
-    const playerOne = Player("⭕");
-    const playerTwo = Player("🗙");
+    const playerOne = Player("O");
+    const playerTwo = Player("X");
     let currentPlayer;
     var turn;
 
@@ -184,9 +184,9 @@ const displayController = (()=>{
             if(e.target.innerText != "") return;
             logicController.playRound(e.target.dataset.index);
             refreshGridDisplay();
-            //if(logicController.checkWinner()) return;
-            //logicController.playRound(aiController.findBestTurn(gameBoard.getBoard()));
-            //refreshGridDisplay();
+            if(logicController.checkWinner()) return;
+            logicController.playRound(aiController.findBestTurn(gameBoard.getBoard()));
+            refreshGridDisplay();
         })
     });
 
